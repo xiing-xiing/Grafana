@@ -1,0 +1,43 @@
+influxdb官网： ​https://www.influxdata.com/get-influxdb/​​
+
+centos下载influxdb：wget https://dl.influxdata.com/influxdb/releases/influxdb-1.8.3.x86_64.rpm
+
+centos安装influxdb：sudo yum localinstall influxdb-1.8.3.x86_64.rpm
+
+bin目录：/usr/bin/influx
+
+启动命令
+systemctl start influxdb.service
+  
+重启命令
+systemctl restart influxdb.service 
+
+关闭命令
+systemctl stop influxdb.service 
+
+用命令​​systemctl start influxdb.service启动influxdb使用的是默认配置​​/etc/influxdb/influxdb.conf​​
+具体配置可参看如下：
+cat /usr/lib/systemd/system/influxdb.service 
+
+密码创建：
+创建用户并设置密码：create user root with password 'root@0721'
+查看所有用户：show users
+修改密码：set password for root='root@0987'
+删除用户：drop user xxx
+查询用户的权限：show grants for <username>
+授权：GRANT ALL PRIVILEGES TO <username>
+     GRANT [READ,WRITE,ALL] ON <database_name> TO <username>
+回收权限：REVOKE ALL PRIVILEGES FROM <username>
+REVOKE [READ,WRITE,ALL] ON <database_name> FROM <username>
+
+创建用户+密码+授权：create user root with password 'root@0721' with all privileges
+
+开启权限验证：
+创建用户+设置密码+权限管理之后，还需要修改配置​​/etc/influxdb/influxdb.conf
+vim /etc/influxdb/influxdb.conf
+开启权限验证：auth-enabled = true
+
+重启influxdb并连接测试：
+重启：systemctl restart influxdb.service 
+输入用户名+密码连接：influx -username root -password root@0721
+也可以输入​​influx​​，在客户端输入auth验证用户名和密码：
